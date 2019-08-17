@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script>
+  window.onload = function(){
+    linePlot();
+    pieChart();
+    addStats();
+  }
+
+  function addStats(){
+    $.ajax({
+      url:'/addStats',
+      type:'GET',
+      success(res){
+
+        var div = $('<div>')
+        .attr('class','col')
+          .append($('<h3>')
+          .attr('class','Item'),
+          $('<div>')
+          .attr('class', 'row')
+            .append($('<label class=> Category')
+            .attr('class', 'Category')),
+          $('<div>')
+          .attr('class', 'row')
+            .append($('<label> Span')
+            .attr('class', 'Span')),
+          $('<div>')
+          .attr('class', 'row')
+            .append($('<label> Average')
+            .attr('class', 'Average')));
+
+
+        var listObj = JSON.parse(res);
+        var listed = '';
+
+        $.each(listObj,function(index, value){
+          listed = $(div).clone();
+          $(listed).find('.Item').text(value.item);
+          $(listed).find('.Category').text(value.category);
+          $(listed).find('.Span').text(value.span);
+          $(listed).find('.Average').text(value.average);
+          $('.insertData').append(listed);
+        });
+      },
+      error: function(error){
+        console.log(error);
+      }
+    });
+  }
+
+  function pieChart(){
+    $.ajax({
+      url:'/getStatsPieChart',
+      type:'GET',
+      success(res){
+        var pieChartObj = JSON.parse(res);
+        var dataPoints = [];
+        var options = {
+	         title: {
+		           text: "All Expenses"
+	         },
+	         subtitles: [{
+		           text: "To today"
+	         }],
+	         animationEnabled: true,
+	         data: [{
+		           type: "pie",
+		           startAngle: 40,
+		           toolTipContent: "<b>{label}</b>: {y}%",
+		           showInLegend: "true",
+		           legendText: "{label}",
+		           indexLabelFontSize: 16,
+		           indexLabel: "{label} - {y}%",
+		           dataPoints: dataPoints
+	         }]
+         };
+
+        $.each(pieChartObj,function(index, value){
+          //value.x is of dictionary input x gotta set up json
+          dataPoints.push({y: parseInt(value.Y), label: value.Label});
+        });
+
+        $("#chartPieContainer").CanvasJSChart(options);
+      }
+    })
+  }
+
+  function linePlot(){
+    $.ajax({
+      url:'/getStatsLinePlot',
+      type:'GET',
+      success(res){
+        //Set up html to insert
+        var linePlotObj = JSON.parse(res);
+        var dataPoints = [];
+        var xAxisTitle;
+        var options = {
+          animationEnabled: true,
+        	theme: "light2",
+        	title: {
+        		text: "Weekly Average Expenses"
+        	},
+        	axisX: {
+            title: 'Week Number',
+            titleFontSize: 24,
+        		valueFormatString: "###",
+        	},
+        	axisY: {
+        		title: "USD",
+        		titleFontSize: 24,
+        		includeZero: false
+        	},
+        	data: [{
+        		type: "line",
+        		yValueFormatString: "###.##",
+        		dataPoints: dataPoints
+        	}]
+        };
+
+        $.each(linePlotObj,function(index, value){
+
+          //value.x is of dictionary input x gotta set up json
+          dataPoints.push({x: parseInt(value.X), y: parseInt(value.Y)});
+        });
+
+        $("#chartContainer").CanvasJSChart(options)
+      },
+      error: function(error){
+        console.log(error);
+      }
+    });
+  }
+  </script>
+</head>
+<body>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">RevaNew</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/userHome">Home</a></li>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Accounts<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/showAddAccount">Add Account</a></li>
+            <li><a href="/showAccounts">Show Accounts</a></li>
+          </ul>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Expenses<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/showAddExpense">Add Expense</a></li>
+            <li><a href="/showExpenses">Show Expenses</a></li>
+          </ul>
+          <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Incomes<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="/showAddIncome">Add Income</a></li>
+              <li><a href="/showIncomes">Show Incomes</a></li>
+            </ul>
+          <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Deductions<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="/showAddDeduction">Add Deduction</a></li>
+              <li><a href="/showDeductions">Show Deductions</a></li>
+            </ul>
+          <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Save For<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="/showAddSaveFor">Add Save For</a></li>
+              <li><a href="/showSaveFor">Show Save For</a></li>
+            </ul>
+          <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Statistics<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Show Stats</a></li>
+            </ul>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container">
+      <div class="row">
+
+          <div class="col">
+              <div id="chartPieContainer" style="height: 370px; width: 100%;"></div>
+              <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+              <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+
+          </div>
+          <div class="col">
+              <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+              <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+              <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+          </div>
+      </div>
+
+      <div class="row insertData">
+
+      </div>
+  </div>
+</body>
+</html>

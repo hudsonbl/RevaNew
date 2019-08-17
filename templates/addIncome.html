@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">RevaNew</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/userHome">Home</a></li>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Accounts<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/showAddAccount">Add Account</a></li>
+            <li><a href="/showAccounts">Show Accounts</a></li>
+          </ul>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Expenses<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/showAddExpense">Add Expense</a></li>
+            <li><a href="/showExpenses">Show Expenses</a></li>
+          </ul>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Incomes<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/#">Add Income</a></li>
+            <li><a href="/showIncomes">Show Incomes</a></li>
+          </ul>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Deductions<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/showAddDeduction">Add Deduction</a></li>
+            <li><a href="/showDeductions">Show Deductions</a></li>
+          </ul>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Save For<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/showAddSaveFor">Add Save For</a></li>
+            <li><a href="/showSaveFor">Show Save For</a></li>
+          </ul>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Statistics<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/showStats">Show Stats</a></li>
+          </ul>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container">
+  <section>
+          <form class="form-horizontal" method="post" action="/addIncome">
+              <fieldset>
+
+                  <!-- Form Name -->
+                  <legend>Add Income</legend>
+
+                  <!-- Text input-->
+                  <div class="form-group">
+                      <label class="col-md-4 control-label" for="txtTitle">Income Title</label>
+                      <div class="col-md-4">
+                          <input id="txtTitle" name="inputTitle" type="text" placeholder="placeholder" class="form-control input-md">
+                      </div>
+                  </div>
+
+                  <!-- Text input-->
+                  <div class="form-group">
+                      <label class="col-md-4 control-label" for="txtTitle">Amount Paid</label>
+                      <div class="col-md-4">
+                          <input id="txtTitle" name="inputPaid" type="text" placeholder="placeholder" class="form-control input-md">
+                      </div>
+                  </div>
+
+                  <!-- Text input-->
+                  <div class="form-group">
+                      <label class="col-md-4 control-label" for="txtTitle">Payout Frequency</label>
+                      <div class="col-md-4">
+                          <input id="txtTitle" name="inputFreq" type="text" placeholder="placeholder" class="form-control input-md">
+                      </div>
+                  </div>
+
+                  <!-- Text input-->
+                  <div class="form-group">
+                      <label class="col-md-4 control-label" for="txtTitle">Date Paid</label>
+                      <div class="col-md-4">
+                          <input id="txtTitle" name="inputDate" type="text" placeholder="placeholder" class="form-control input-md">
+                      </div>
+                  </div>
+
+                  <!-- Text input-->
+                  <div class="form-group">
+                      <label class="col-md-4 control-label" for="txtTitle">Account</label>
+                      <div class="col-md-4">
+                          <input id="txtTitle" name="inputAccount" type="text" placeholder="placeholder" class="form-control input-md">
+                      </div>
+                  </div>
+
+                  <!-- Button -->
+                  <div class="form-group">
+                      <label class="col-md-4 control-label" for="singlebutton"></label>
+                      <div class="col-md-4">
+                          <input id="singlebutton" name="singlebutton" class="btn btn-primary" type="submit" value="Publish" />
+                      </div>
+                  </div>
+
+              </fieldset>
+          </form>
+
+      </section>
+    </div>
+</body>
+</html>

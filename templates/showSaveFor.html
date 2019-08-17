@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"/>
+  <script src="../static/js/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+  <script>
+   $(function(){
+     $.ajax({
+       url : '/getSaveFor',
+       type : 'GET',
+       success: function(res){
+
+         var tr = $('<tr>')
+         .append($('<td>')
+         .attr('class','SF'),
+         $('<td>')
+         .attr('class', 'Cost'),
+         $('<td>')
+         .attr('class', 'Date'),
+         $('<td>')
+         .attr('class', 'Account'));
+         //$('<td>')
+         //.attr('class', 'Reason'),
+         //$('<td>')
+         //.attr('class', 'Net')
+
+
+         var sfObj = JSON.parse(res);
+         var sf = '';
+
+         $.each(sfObj,function(index, value){
+           sf = $(tr).clone();
+
+           $(sf).find('.SF').text(value.desire);
+           $(sf).find('.Cost').text(value.cost);
+           $(sf).find('.Date').text(value.date);
+           $(sf).find('.Account').text(value.deduct_account);
+
+           //$(sf).find('.Reason').text(value.reasonable);
+           //$(sf).find('.Net').text(value.netAmount);
+           $('.insertData').append(sf);
+         });
+       },
+       error: function(error){
+         console.log(error);
+       }
+     });
+   });
+   </script>
+
+</head>
+<body>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">RevaNew</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/userHome">Home</a></li>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Accounts<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/showAddAccount">Add Account</a></li>
+            <li><a href="/showAccounts">Show Accounts</a></li>
+          </ul>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Expenses<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/showAddExpense">Add Expense</a></li>
+            <li><a href="/showExpenses">Show Expenses</a></li>
+          </ul>
+          <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Incomes<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="/showAddIncome">Add Income</a></li>
+              <li><a href="/showIncomes">Show Incomes</a></li>
+            </ul>
+          <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Deductions<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="/showAddDeduction">Add Deduction</a></li>
+              <li><a href="/showDeductions">Show Deductions</a></li>
+            </ul>
+          <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Save For<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="/showAddSaveFor">Add Save For</a></li>
+              <li><a href="#">Show Save For</a></li>
+            </ul>
+          <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Statistics<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="/showStats">Show Stats</a></li>
+            </ul>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container">
+      <div class="header">
+        <h3 class="text-muted">All Items Saving For</h3>
+      </div>
+
+      <table class="table">
+          <thead class="thead-dark">
+              <tr>
+                  <th scope="col">Save For</th>
+                  <th scope="col">Cost</th>
+                  <th scope="col">Date Purchase Desired</th>
+                  <th scope="col">Account</th>
+                  <!--
+                  <th scope="col">Reasonability Level</th>
+                  <th scope="col">Net Worth After Transaction</th>
+                -->
+              </tr>
+          </thead>
+          <tbody class="insertData">
+
+          </tbody>
+      </table>
+
+  </div>
+</body>
+</html>
