@@ -14,8 +14,8 @@ app = Flask(__name__)
 app.secret_key = 'secret key'
 
 #MySQL Configurations
-app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = '1738'
+app.config['MYSQL_DATABASE_USER'] = 'conveyor'
+app.config['MYSQL_DATABASE_PASSWORD'] = '77a7da320280a6a6379be231'
 app.config['MYSQL_DATABASE_DB'] = 'RevaNew'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
