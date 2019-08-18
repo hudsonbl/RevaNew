@@ -36,49 +36,49 @@ class Feature_Accounts:
 
     #Adds a account to the user
     def add_account(self, account_name, amount_saved):
-    	self.user_accounts.append({'account': account_name,
-    				               'saved': amount_saved})
+        self.user_accounts.append({'account': account_name,
+                                   'saved': amount_saved})
 
     #Adds incomes to the user
     def add_income(self, _paid, _job, _frequency, _payday, d_account):
-    	#_payday = self.user.translate_to_date(payday)
-    	self.incomes.append({'paid': 			_paid,
-    			             'ttype': 			_job,
-    			             'frequency': 		_frequency,
-    			             'payday': 			_payday,
-    			             'deposit_account': d_account})
+        #_payday = self.user.translate_to_date(payday)
+        self.incomes.append({'paid': 			_paid,
+                             'ttype': 			_job,
+                             'frequency': 		_frequency,
+                             'payday': 			_payday,
+                             'deposit_account': d_account})
 
     #Adds deductions to the user
     def add_deduction(self, _amount, _type, _frequency, _date, d_account):
-    	#date_ = self.user.translate_to_date(_date)
-    	self.deductions.append({'amount':          _amount,
-    				            'type':            _type,
-    				            'frequency':       _frequency,
-    			                'date':            _date,
-    				            'deduct_account':  d_account})
+        #date_ = self.user.translate_to_date(_date)
+        self.deductions.append({'amount':          _amount,
+                                'type':            _type,
+                                'frequency':       _frequency,
+                                'date':            _date,
+                                'deduct_account':  d_account})
 
     #Adds save for to the user
     def add_save_for(self, _desire, _date, _cost, d_account, start_date):
-    	#date_ = self.user.translate_to_date(_date)
-    	self.save_for.append({'desire':          _desire,
-    				          'cost':            _cost,
-    			              'date':            _date,
-    				          'deduct_account':  d_account,
+        #date_ = self.user.translate_to_date(_date)
+        self.save_for.append({'desire':          _desire,
+                              'cost':            _cost,
+                              'date':            _date,
+                              'deduct_account':  d_account,
                               'start_date':      start_date})
 
     #Checks if any incomes are available today()
     def check_incomes(self):
         for income in self.incomes:
             if self.user.days_to_date(income.get('payday')) == 0:
-    	        #print("Processing Payday.....")
-        		#print("======================")
+                #print("Processing Payday.....")
+                #print("======================")
                 search = [i for i, x in enumerate(self.user_accounts) if x['account'] == income.get('deposit_account')][0]
                 income_amount = float(income.get('paid'))
-            	account_sum = float(self.user_accounts[search].get('saved'))
-            	account_sum += income_amount
-            	self.user_accounts[search].update({'saved': account_sum})
-            	#print("Account: " + str(self.user_accounts[search].get('account')))
-            	#print("Total: " + str(self.user_accounts[search].get('saved')))
+                account_sum = float(self.user_accounts[search].get('saved'))
+                account_sum += income_amount
+                self.user_accounts[search].update({'saved': account_sum})
+                #print("Account: " + str(self.user_accounts[search].get('account')))
+                #print("Total: " + str(self.user_accounts[search].get('saved')))
 
     #Checks if any deductions are available today() rip
     #function broken worked with console not with db
@@ -86,35 +86,35 @@ class Feature_Accounts:
     def check_deductions(self):
         pass
     """
-    	for deduction in self.deductions:
-    	    if self.user.days_to_date(deduction.get('date')) == 0:
-    	        print("Processing deduction")
-        		search = [i for i, x in enumerate(self.user_accounts) if x['account'] == deduction.get('deduct_account')][0]
-        		deduct_amount = float(deduction.get('amount'))
-        		account_sum = float(self.user_accounts[search].get('saved'))
-        		#may need to add feature later for what happens if deduction makes account goe below zero
-        		account_sum -= deduct_amount
-        		self.user_accounts[search].update({'saved': account_sum})
+    for deduction in self.deductions:
+            if self.user.days_to_date(deduction.get('date')) == 0:
+                print("Processing deduction")
+                        search = [i for i, x in enumerate(self.user_accounts) if x['account'] == deduction.get('deduct_account')][0]
+                        deduct_amount = float(deduction.get('amount'))
+                        account_sum = float(self.user_accounts[search].get('saved'))
+                        #may need to add feature later for what happens if deduction makes account goe below zero
+                        account_sum -= deduct_amount
+                        self.user_accounts[search].update({'saved': account_sum})
     """
     #Only deducts a specific expense
     def deduct_expense(self, _cost, _account):
         search = [i for i, in enumerate(self.user_accounts) if x['account'] == _account][0]
-    	account_sum = float(self.user_accounts[search].get('saved'))
+        account_sum = float(self.user_accounts[search].get('saved'))
         account_sum -= _cost
         self.user_accounts[search].update({'saved': account_sum})
 
         #handles expenses user spends money from their account
     def deduct_all_expenses(self, user_object):
-    	for expense in user_object.container:
-    	    if expense.get('processed') == False:
-    	        search = [i for i, x in enumerate(self.user_accounts) if x['account'] == expense.get('account')][0]
+        for expense in user_object.container:
+            if expense.get('processed') == False:
+                search = [i for i, x in enumerate(self.user_accounts) if x['account'] == expense.get('account')][0]
                 exp_amount = float(expense.get('cost'))
-            	account_sum = float(self.user_accounts[search].get('saved'))
-            	account_sum -= exp_amount
-            	self.user_accounts[search].update({'saved': account_sum})
-            	expense.update({'processed': True})
+                account_sum = float(self.user_accounts[search].get('saved'))
+                account_sum -= exp_amount
+                self.user_accounts[search].update({'saved': account_sum})
+                expense.update({'processed': True})
 
-    #Didnt work this feature adds save for stuff 
+    #Didnt work this feature adds save for stuff
     #Added last minute. Does funcitonality to determine wether saving for an item by a date is reasonable to user
     def save_for_reasonability(self, sf, user_obj):
         span_sums = []
@@ -212,10 +212,10 @@ class Feature_Accounts:
         #prints the accounts available to user
     def print_accounts(self):
         for account in self.user_accounts:
-    	    name = account.get('account')
-    	    save = account.get('saved')
-    	    print("Account: " + str(name))
-    	    print("Saved: " + str(save))
+            name = account.get('account')
+            save = account.get('saved')
+            print("Account: " + str(name))
+            print("Saved: " + str(save))
 
 
     #prints incomes available to user
