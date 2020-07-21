@@ -14,8 +14,8 @@ app = Flask(__name__)
 app.secret_key = 'secret key'
 
 #MySQL Configurations
-app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = '1738'
+app.config['MYSQL_DATABASE_USER'] = 'conveyor'
+app.config['MYSQL_DATABASE_PASSWORD'] = '77a7da320280a6a6379be231'
 app.config['MYSQL_DATABASE_DB'] = 'RevaNew'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
@@ -237,8 +237,8 @@ def getAccounts():
             #This addition helps resolve creating the dict into a readable json format
             for account in temp_dict:
                 accounts_dict.append({
-                        'account': str(account.get('account')),
-                        'saved':   str(account.get('saved'))
+                    'account': str(account.get('account')),
+                    'saved':   str(account.get('saved'))
                 })
 
             return json.dumps(accounts_dict)
@@ -340,9 +340,9 @@ def getExpenses():
             #This addition helps resolve creating the dict into a readable json format
             for expense in temp_dict:
                 expense_dict.append({
-                        'category': str(expense.get('category')),
-                        'cost':     str(expense.get('cost')),
-                        'date':     str(expense.get('date'))
+                    'category': str(expense.get('category')),
+                    'cost':     str(expense.get('cost')),
+                    'date':     str(expense.get('date'))
                 })
 
             return json.dumps(expense_dict)
@@ -387,11 +387,11 @@ def getIncomes():
             #This addition helps resolve creating the dict into a readable json format
             for income in temp_dict:
                 incomes_dict.append({
-                        'paid':              str(income.get('paid')),
-                        'ttype':             str(income.get('ttype')),
-                        'frequency':         str(income.get('frequency')),
-                        'payday':            str(income.get('payday')),
-                        'deposit_account':   str(income.get('deposit_account'))
+                    'paid':              str(income.get('paid')),
+                    'ttype':             str(income.get('ttype')),
+                    'frequency':         str(income.get('frequency')),
+                    'payday':            str(income.get('payday')),
+                    'deposit_account':   str(income.get('deposit_account'))
                 })
 
             return json.dumps(incomes_dict)
@@ -404,37 +404,37 @@ def getIncomes():
 
 @app.route('/addIncome', methods=['POST'])
 def addIncome():
-        try:
-            _type = request.form['inputTitle']
-            _paid = request.form['inputPaid']
-            _frequency = request.form['inputFreq']
-            _date = request.form['inputDate']
-            _account = request.form['inputAccount']
-            _user = session.get('user')
+    try:
+        _type = request.form['inputTitle']
+        _paid = request.form['inputPaid']
+        _frequency = request.form['inputFreq']
+        _date = request.form['inputDate']
+        _account = request.form['inputAccount']
+        _user = session.get('user')
 
-            conn = mysql.connect()
-            cursor1 = conn.cursor()
-            cursor2 = conn.cursor()
+        conn = mysql.connect()
+        cursor1 = conn.cursor()
+        cursor2 = conn.cursor()
 
-            cursor1.callproc('sp_getAccountIDByAccountName', (_user, _account))
-            account_id = cursor1.fetchall()
+        cursor1.callproc('sp_getAccountIDByAccountName', (_user, _account))
+        account_id = cursor1.fetchall()
 
-            cursor2.callproc('sp_addIncome',(_user, account_id[0][0], _type, _paid, _date, _frequency))
-            data = cursor2.fetchall()
+        cursor2.callproc('sp_addIncome',(_user, account_id[0][0], _type, _paid, _date, _frequency))
+        data = cursor2.fetchall()
 
-            if len(data) is 0:
-                userAccount.add_income(_paid, _type, _frequency, _date, _account)
+        if len(data) is 0:
+            userAccount.add_income(_paid, _type, _frequency, _date, _account)
 
-                conn.commit()
-                return redirect('/showAddIncome')
-            else:
-                return render_template('error.html', error = 'Error ocurred posting account')
-        except Exception as e:
-            return render_template('error.html', error = str(e))
-        finally:
-            cursor1.close()
-            cursor2.close()
-            conn.close()
+            conn.commit()
+            return redirect('/showAddIncome')
+        else:
+            return render_template('error.html', error = 'Error ocurred posting account')
+    except Exception as e:
+        return render_template('error.html', error = str(e))
+    finally:
+        cursor1.close()
+        cursor2.close()
+        conn.close()
 """
 ==========================DEDUCTION============================
 """
@@ -471,11 +471,11 @@ def getDeductions():
             #This addition helps resolve creating the dict into a readable json format
             for deduction in temp_dict:
                 deductions_dict.append({
-                        'amount':           str(deduction.get('amount')),
-                        'type':             str(deduction.get('type')),
-                        'frequency':        str(deduction.get('frequency')),
-                        'date':             str(deduction.get('date')),
-                        'deduct_account':   str(deduction.get('deduct_account'))
+                    'amount':           str(deduction.get('amount')),
+                    'type':             str(deduction.get('type')),
+                    'frequency':        str(deduction.get('frequency')),
+                    'date':             str(deduction.get('date')),
+                    'deduct_account':   str(deduction.get('deduct_account'))
                 })
 
             return json.dumps(deductions_dict)
@@ -488,37 +488,37 @@ def getDeductions():
 
 @app.route('/addDeduction', methods=['POST'])
 def addDeduction():
-        try:
-            _type = request.form['inputTitle']
-            _amount = request.form['inputAmount']
-            _frequency = request.form['inputFreq']
-            _date = request.form['inputDate']
-            _account = request.form['inputAccount']
-            _user = session.get('user')
+    try:
+        _type = request.form['inputTitle']
+        _amount = request.form['inputAmount']
+        _frequency = request.form['inputFreq']
+        _date = request.form['inputDate']
+        _account = request.form['inputAccount']
+        _user = session.get('user')
 
-            conn = mysql.connect()
-            cursor1 = conn.cursor()
-            cursor2 = conn.cursor()
+        conn = mysql.connect()
+        cursor1 = conn.cursor()
+        cursor2 = conn.cursor()
 
-            cursor1.callproc('sp_getAccountIDByAccountName', (_user, _account))
-            account_id = cursor1.fetchall()
+        cursor1.callproc('sp_getAccountIDByAccountName', (_user, _account))
+        account_id = cursor1.fetchall()
 
-            cursor2.callproc('sp_addDeduction',(_user, _type, _frequency, _amount, _date, account_id[0][0]))
-            data = cursor2.fetchall()
+        cursor2.callproc('sp_addDeduction',(_user, _type, _frequency, _amount, _date, account_id[0][0]))
+        data = cursor2.fetchall()
 
-            if len(data) is 0:
-                userAccount.add_deduction(_amount, _type, _frequency, _date, _account)
+        if len(data) is 0:
+            userAccount.add_deduction(_amount, _type, _frequency, _date, _account)
 
-                conn.commit()
-                return redirect('/showAddDeduction')
-            else:
-                return render_template('error.html', error = 'Error ocurred posting account')
-        except Exception as e:
-            return render_template('error.html', error = str(e))
-        finally:
-            cursor1.close()
-            cursor2.close()
-            conn.close()
+            conn.commit()
+            return redirect('/showAddDeduction')
+        else:
+            return render_template('error.html', error = 'Error ocurred posting account')
+    except Exception as e:
+        return render_template('error.html', error = str(e))
+    finally:
+        cursor1.close()
+        cursor2.close()
+        conn.close()
 
 """
 ============================SAVE+FOR============================
@@ -558,10 +558,10 @@ def getSaveFor():
                 #answer, netAmount = userAccount.save_for_reasonability(sf, userLedger)
 
                 sfs_dict.append({
-                        'desire':           str(sf.get('desire')),
-                        'cost':             str(sf.get('cost')),
-                        'date':             str(sf.get('date')),
-                        'deduct_account':   str(sf.get('deduct_account'))
+                    'desire':           str(sf.get('desire')),
+                    'cost':             str(sf.get('cost')),
+                    'date':             str(sf.get('date')),
+                    'deduct_account':   str(sf.get('deduct_account'))
                 })
 
             return json.dumps(sfs_dict)
@@ -574,37 +574,37 @@ def getSaveFor():
 
 @app.route('/addSaveFor', methods=['POST'])
 def addSaveFor():
-        try:
-            _desire = request.form['inputTitle']
-            _cost = request.form['inputCost']
-            _date = request.form['inputDate']
-            _account = request.form['inputAccount']
-            _start_date = request.form['inputStartDate']
-            _user = session.get('user')
+    try:
+        _desire = request.form['inputTitle']
+        _cost = request.form['inputCost']
+        _date = request.form['inputDate']
+        _account = request.form['inputAccount']
+        _start_date = request.form['inputStartDate']
+        _user = session.get('user')
 
-            conn = mysql.connect()
-            cursor1 = conn.cursor()
-            cursor2 = conn.cursor()
+        conn = mysql.connect()
+        cursor1 = conn.cursor()
+        cursor2 = conn.cursor()
 
-            cursor1.callproc('sp_getAccountIDByAccountName', (_user, _account))
-            account_id = cursor1.fetchall()
+        cursor1.callproc('sp_getAccountIDByAccountName', (_user, _account))
+        account_id = cursor1.fetchall()
 
-            cursor2.callproc('sp_addSF',(_user, _date, _desire, _cost, account_id[0][0], _start_date))
-            data = cursor2.fetchall()
+        cursor2.callproc('sp_addSF',(_user, _date, _desire, _cost, account_id[0][0], _start_date))
+        data = cursor2.fetchall()
 
-            if len(data) is 0:
-                userAccount.add_save_for(_desire, _date, _cost, _account, _start_date)
+        if len(data) is 0:
+            userAccount.add_save_for(_desire, _date, _cost, _account, _start_date)
 
-                conn.commit()
-                return redirect('/showAddSaveFor')
-            else:
-                return render_template('error.html', error = 'Error ocurred posting account')
-        except Exception as e:
-            return render_template('error.html', error = str(e))
-        finally:
-            cursor1.close()
-            cursor2.close()
-            conn.close()
+            conn.commit()
+            return redirect('/showAddSaveFor')
+        else:
+            return render_template('error.html', error = 'Error ocurred posting account')
+    except Exception as e:
+        return render_template('error.html', error = str(e))
+    finally:
+        cursor1.close()
+        cursor2.close()
+        conn.close()
 
 
 """
@@ -620,97 +620,97 @@ def showStats():
 
 @app.route('/getStatsLinePlot')
 def getStatsLinePlot():
-        try:
-            if session.get('user'):
-                _user = session.get('user')
-                line_plot_dict = []
-                category_dict = []
-                average = 0
+    try:
+        if session.get('user'):
+            _user = session.get('user')
+            line_plot_dict = []
+            category_dict = []
+            average = 0
 
-                average, line_plot_data = userLedger.get_avg_weekly_spendings()
-                ##Create the graph dictionary
-                test_dict = []
-                i = 0
-                print(str(len(line_plot_data)))
-                for i in range(len(line_plot_data)):
-                    test_dict.append({
-                                'X': str(i),
-                                'Y': str(line_plot_data[i])
-                    })
+            average, line_plot_data = userLedger.get_avg_weekly_spendings()
+            ##Create the graph dictionary
+            test_dict = []
+            i = 0
+            print(str(len(line_plot_data)))
+            for i in range(len(line_plot_data)):
+                test_dict.append({
+                    'X': str(i),
+                    'Y': str(line_plot_data[i])
+                })
 
 
                 return json.dumps(test_dict)
 
             else:
                 return render_template('error.html', error = 'Unauthorized Access')
-        except Exception as e:
-            return render_template('error.html', error = str(e))
+    except Exception as e:
+        return render_template('error.html', error = str(e))
 
 @app.route('/getStatsPieChart')
 def getStatsPieChart():
-        try:
-            if session.get('user'):
-                _user = session.get('user')
+    try:
+        if session.get('user'):
+            _user = session.get('user')
 
-                pie_dict = []
-                category_dict = []
+            pie_dict = []
+            category_dict = []
 
-                category_dict, pie_dict = userLedger.expense_statistics()
-                ##Create the graph dictionary
-                test_dict = []
+            category_dict, pie_dict = userLedger.expense_statistics()
+            ##Create the graph dictionary
+            test_dict = []
 
-                for pie_data in pie_dict:
-                    test_dict.append({
-                        'Y': str(pie_data.get('Average')),
-                        'Label': str(pie_data.get('Category'))
-                    })
+            for pie_data in pie_dict:
+                test_dict.append({
+                    'Y': str(pie_data.get('Average')),
+                    'Label': str(pie_data.get('Category'))
+                })
 
                 return json.dumps(test_dict)
 
             else:
                 return render_template('error.html', error = 'Unauthorized Access')
-        except Exception as e:
-            return render_template('error.html', error = str(e))
+    except Exception as e:
+        return render_template('error.html', error = str(e))
 
 
 @app.route('/addStats')
 def addStats():
-            try:
-                if session.get('user'):
-                    _user = session.get('user')
+    try:
+        if session.get('user'):
+            _user = session.get('user')
 
 
-                    span_sums = []
-                    wAverage = mAverage = 0
+            span_sums = []
+            wAverage = mAverage = 0
 
-                    wAverage, span_sums = userLedger.get_avg_spendings('weekly')
-                    mAverage, span_sums = userLedger.get_avg_spendings('month')
-                    ##Create the graph dictionary
-                    test_dict = []
+            wAverage, span_sums = userLedger.get_avg_spendings('weekly')
+            mAverage, span_sums = userLedger.get_avg_spendings('month')
+            ##Create the graph dictionary
+            test_dict = []
 
-                    test_dict.append({
-                        'item': "Weekly Stats",
-                        'category': "All Categories",
-                        'span': "Weekly",
-                        'average': str(wAverage)
-                    })
-                    test_dict.append({
-                        'item': "Monthly Stats",
-                        'category': 'All Categories',
-                        'span': 'Monthly',
-                        'average': str(mAverage)
-                    })
+            test_dict.append({
+                'item': "Weekly Stats",
+                'category': "All Categories",
+                'span': "Weekly",
+                'average': str(wAverage)
+            })
+            test_dict.append({
+                'item': "Monthly Stats",
+                'category': 'All Categories',
+                'span': 'Monthly',
+                'average': str(mAverage)
+            })
 
-                    return json.dumps(test_dict)
+            return json.dumps(test_dict)
 
-                else:
-                    return render_template('error.html', error = 'Unauthorized Access')
-            except Exception as e:
-                return render_template('error.html', error = str(e))
+        else:
+            return render_template('error.html', error = 'Unauthorized Access')
+    except Exception as e:
+        return render_template('error.html', error = str(e))
 
 """
 ============================MAIN============================
 """
 
 if __name__ == "__main__":
-    app.run(port=5000)
+    app.run()
